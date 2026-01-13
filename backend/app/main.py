@@ -9,7 +9,7 @@ setup_logging()
 
 app = FastAPI(
     title="Trading Bot API",
-    description="API для управления торговыми ботами Binance и Bybit",
+    description="API для управления торговыми ботами Binance, Bybit, OKX и Bitget",
     version="1.0.0",
     docs_url="/docs",
     redoc_url="/redoc",

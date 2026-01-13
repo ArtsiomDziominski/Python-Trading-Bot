@@ -12,6 +12,8 @@ class BotStatus(str, enum.Enum):
 class Exchange(str, enum.Enum):
     BINANCE = "binance"
     BYBIT = "bybit"
+    OKX = "okx"
+    BITGET = "bitget"
 
 class Bot(Base):
     __tablename__ = "bots"

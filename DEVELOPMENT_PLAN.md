@@ -1,6 +1,6 @@
 ---
 name: Trading Bot Backend
-overview: Разработка бэкенда на FastAPI для создания и управления торговыми ботами для Binance и Bybit с системой регистрации, отслеживанием ордеров и автоматическими действиями
+overview: Разработка бэкенда на FastAPI для создания и управления торговыми ботами для Binance, Bybit, OKX и Bitget с системой регистрации, отслеживанием ордеров и автоматическими действиями
 todos:
   - id: setup-infrastructure
     content: Настроить Docker Compose с PostgreSQL, Redis и FastAPI. Создать базовую структуру проекта, requirements.txt, Dockerfile, .env.example
@@ -16,7 +16,7 @@ todos:
     dependencies:
       - database-setup
   - id: exchange-integration
-    content: Создать сервис для работы с Binance и Bybit через ccxt. Реализовать шифрование API ключей
+    content: Создать сервис для работы с Binance, Bybit, OKX и Bitget через ccxt. Реализовать шифрование API ключей
     status: completed
     dependencies:
       - database-setup
@@ -53,7 +53,7 @@ todos:
       - logging-monitoring
 ---
 
-# План разработки бэкенда для торговых ботов Binance и Bybit
+# План разработки бэкенда для торговых ботов Binance, Bybit, OKX и Bitget
 
 ## Архитектура системы
 
@@ -84,10 +84,16 @@ graph TB
     
     Bot1 --> BinanceAPI[Binance API]
     Bot1 --> BybitAPI[Bybit API]
+    Bot1 --> OKXAPI[OKX API]
+    Bot1 --> BitgetAPI[Bitget API]
     Bot2 --> BinanceAPI
     Bot2 --> BybitAPI
+    Bot2 --> OKXAPI
+    Bot2 --> BitgetAPI
     Bot3 --> BinanceAPI
     Bot3 --> BybitAPI
+    Bot3 --> OKXAPI
+    Bot3 --> BitgetAPI
     
     Bot1 --> DB
     Bot2 --> DB
@@ -457,7 +463,7 @@ trading-bot-system/
 
 ### 4. Интеграция с биржами
 
-- Унифицированный интерфейс для Binance и Bybit через ccxt
+- Унифицированный интерфейс для Binance, Bybit, OKX и Bitget через ccxt
 - Обработка ошибок API
 - Rate limiting
 - WebSocket для real-time обновлений (опционально)
@@ -499,7 +505,7 @@ trading-bot-system/
 
 ### Этап 4: Интеграция с биржами
 
-- Обёртка для ccxt (Binance/Bybit клиенты)
+- Обёртка для ccxt (Binance/Bybit/OKX/Bitget клиенты)
 - Сервис для работы с биржами (выставление ордеров, получение статуса)
 - Шифрование API ключей пользователей
 - Валидация параметров ордеров

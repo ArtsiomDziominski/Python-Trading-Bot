@@ -15,8 +15,15 @@ class AuthService:
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="User with this email already exists"
             )
-        
-        hashed_password = get_password_hash(user_data.password)
+
+        # Truncate password to 72 bytes for bcrypt compatibility
+        password_bytes = user_data.password.encode('utf-8')
+        if len(password_bytes) > 72:
+            password = password_bytes[:72].decode('utf-8', errors='ignore')
+        else:
+            password = user_data.password
+
+        hashed_password = get_password_hash(password)
         user = User(
             email=user_data.email,
             hashed_password=hashed_password
@@ -32,4 +39,32 @@ class AuthService:
             return None
         if not verify_password(password, user.hashed_password):
             return None
+        return user
+
+    def update_password(self, user: User, current_password: str, new_password: str) -> User:
+        # Проверяем текущий пароль
+        if not verify_password(current_password, user.hashed_password):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Current password is incorrect"
+            )
+
+        # Проверяем, что новый пароль отличается от текущего
+        if verify_password(new_password, user.hashed_password):
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="New password must be different from current password"
+            )
+
+        # Усекаем новый пароль до 72 байтов для bcrypt совместимости
+        password_bytes = new_password.encode('utf-8')
+        if len(password_bytes) > 72:
+            password = password_bytes[:72].decode('utf-8', errors='ignore')
+        else:
+            password = new_password
+
+        # Хешируем и сохраняем новый пароль
+        user.hashed_password = get_password_hash(password)
+        self.db.commit()
+        self.db.refresh(user)
         return user
